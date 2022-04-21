@@ -5,7 +5,7 @@ from rest_framework       import serializers
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model  = User
-        fields = ['id', 'passwd', 'name', 'email']
+        fields = ['id', 'password', 'name', 'email']
 
     def to_representation(self, obj):
         user    = User.objects.get(id=obj.id)
