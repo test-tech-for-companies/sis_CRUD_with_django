@@ -12,12 +12,13 @@ def create_auth_token(sender,instance=None,created=False,**kwargs):
         Token.objects.create(user=instance)
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email, password=None, **extrafields):
         if not email:
             raise ValueError("El cliente debe tener un email.")
         user = self.model(
             email=self.normalize_email(email),
             password=password,
+            **extrafields            
         )
         user.set_password(password)
 
