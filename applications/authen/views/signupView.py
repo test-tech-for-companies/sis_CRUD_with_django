@@ -14,4 +14,4 @@ class SignUpView(views.APIView):
         user = serializer.save()
         token, __ = Token.objects.get_or_create(user=user)
 
-        return Response({'token': token.key}, status=status.HTTP_201_CREATED)
+        return Response({'token': token.key, 'user_id': user.id}, status=status.HTTP_201_CREATED)
