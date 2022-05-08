@@ -1,0 +1,162 @@
+--------------------------------------------------------------------------------------------------
+register
+--------------------------------------------------------------------------------------------------
+{
+    "name": "francisco",
+    "password": "contraseña",
+    "email": "fjgomezpe@misionTIC.com"
+}
+
+curl http://127.0.0.1:8000/user/ \
+-X POST \
+-H "Content-Type: application/json" \
+-d @user1.json \
+-vvv \
+; echo "" | cat -e \
+
+{
+    "refresh":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNDg1MTc4NywianRpIjoiN2I3ZDc1YTc4NDdhNDRmZGI2NTAxNzUwMzgzNmQxNDAiLCJ1c2VyX2lkIjoxfQ.4asM-KzCm-aDbK48SsWTRCcWJ_J8PM4UQCCruGG6xM4",
+    "access":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM0NzY1NTY3LCJqdGkiOiI3YjEzMTE3MGYyYzU0N2Y4ODc1ZWE1NDNmYjMxMmRjOSIsInVzZXJfaWQiOjF9.3Lg6JuYysahwst92PwL6TrNG3tDg3QWvOHDo_KSnNnI"
+}
+
+--------------------------------------------------------------------------------------------------
+login
+--------------------------------------------------------------------------------------------------
+
+{
+    "username":"fjgomezpe",
+    "password":"contraseña"
+}
+
+curl http://127.0.0.1:8000/login/ \
+-X POST \
+-H "Content-Type: application/json" \
+-d @login1.json \
+-vvv \
+; echo "" | cat -e \
+
+
+{
+    "refresh":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNDg1Mjg2MSwianRpIjoiY2MwMjg0N2QyYTQ0NDM4OTg2NTk4ZDljNzgyYTIwOGYiLCJ1c2VyX2lkIjoxfQ.64VcvEnE_keIOL9fijRKUcp8987vdKKvmWlfQgtaf6w",
+    "access":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM0NzY2NjQxLCJqdGkiOiIwYzBlYzgxMmJmNmQ0MTY0OTE4MzA1MGE4MDRlMDlkOCIsInVzZXJfaWQiOjF9.LQAdmgKrP5CeIke9lhDKOvRtjNOVjAtKSya0X9AFgkM"
+}
+
+--------------------------------------------------------------------------------------------------
+other resource with authorization
+--------------------------------------------------------------------------------------------------
+
+
+curl http://127.0.0.1:8000/detail/1/ \
+-X GET \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwNDc2MTM3LCJpYXQiOjE2NTA0NzU4MzcsImp0aSI6Ijk4NDI2NWE5NTMzNTQ2OTdiOTNhMWMwNWJlZWYxYjc0IiwidXNlcl9pZCI6OH0.8Zel4D8iJn0Ifz-KUQo3k1I_3mRJGrZQlrOgWLs1RaU" \
+
+{
+    "id": 1,
+    "username": 
+    "fjgomezpe", 
+    "name": "francisco", 
+    "email": "fjgomezpe@misionTIC.com",
+    "account": {
+        "id": 1,
+        "balance": 20000,
+        "lastChangeDate": "2021-09-23T10:25:43.511000Z",
+        "isActive":true
+    }
+}
+
+--------------------------------------------------------------------------------------------------
+other resource without authorization
+--------------------------------------------------------------------------------------------------
+
+
+curl http://127.0.0.1:8000/user/1/ \
+-X GET \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM0NzY2NjQxLCJqdGkiOiIwYzBlYzgxMmJmNmQ0MTY0OTE4MzA1MGE4MDRlMDlkOCIsInVzZXJfaWQiOjF9.LQAdmgKrP5CeIke9lhDKOvRtjNOVjAtKSya0X9AFgkM" \
+
+{
+    "detail": "Given token not valid for any token type",
+    "code": "token_not_valid",
+    "messages": [
+        {
+            "token_class": "AccessToken",
+            "token_type":"access",
+            "message":"Token is invalid or expired"
+        }
+    ]
+}
+
+--------------------------------------------------------------------------------------------------
+refresh token to get a new access token
+--------------------------------------------------------------------------------------------------
+
+{
+    "refresh":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTYzNDg1Mjg2MSwianRpIjoiY2MwMjg0N2QyYTQ0NDM4OTg2NTk4ZDljNzgyYTIwOGYiLCJ1c2VyX2lkIjoxfQ.64VcvEnE_keIOL9fijRKUcp8987vdKKvmWlfQgtaf6w"
+}
+
+curl http://127.0.0.1:8000/refresh/ \
+-X POST \
+-H "Content-Type: application/json" \
+-d @refresh1.json \
+-vvv \
+; echo "" | cat -e \
+
+
+{
+    "access":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM0NzY3NDM4LCJqdGkiOiI3MzdlM2QxN2Q1MGI0ODFkYTAyMzM2YzI2NDRlM2Y3NCIsInVzZXJfaWQiOjF9.wKAZWLcLly27oyBo8sWehRzbv_GaT46WFij_x73oikk"
+}
+
+
+--------------------------------------------------------------------------------------------------
+Again other resource with authorization
+--------------------------------------------------------------------------------------------------
+
+
+curl http://127.0.0.1:8000/user/1/ \
+-X GET \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM0NzY3NDM4LCJqdGkiOiI3MzdlM2QxN2Q1MGI0ODFkYTAyMzM2YzI2NDRlM2Y3NCIsInVzZXJfaWQiOjF9.wKAZWLcLly27oyBo8sWehRzbv_GaT46WFij_x73oikk" \
+
+{
+    "id": 1,
+    "username": 
+    "fjgomezpe", 
+    "name": "francisco", 
+    "email": "fjgomezpe@misionTIC.com",
+    "account": {
+        "id": 1,
+        "balance": 20000,
+        "lastChangeDate": "2021-09-23T10:25:43.511000Z",
+        "isActive":true
+    }
+}
+
+
+--------------------------------------------------------------------------------------------------
+GET detail user
+--------------------------------------------------------------------------------------------------
+
+Input:
+
+curl http://127.0.0.1:8000/detail/1/ \
+-X GET \
+-H "Authorization: Token 18c108e1d35fe51830d5d71c2885ddc30df38ac0" \
+-vvv \
+; echo "" | cat -e \
+
+Output:
+
+{
+    "id": 1,
+    "name": "francisco",
+    "email": "fjgomezpe@misiontic.com"
+}
+
+curl http://127.0.0.1:8000/change/1/ \
+-X PUT \
+-H "Authorization: Token 18c108e1d35fe51830d5d71c2885ddc30df38ac0" \
+-H "Content-Type: application/json" \
+-d @update1.json \
+-vvv \
+; echo "" | cat -e \
